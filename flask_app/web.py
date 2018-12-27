@@ -13,7 +13,8 @@ def hello():
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
     stream= mb.check_stream()
-    return render_template('control_panel.html',stream=stream)
+    status=mb.status();
+    return render_template('control_panel.html',stream=stream, status=status)
 
 '''
 @app.route('/check_stream',methods=['get'])

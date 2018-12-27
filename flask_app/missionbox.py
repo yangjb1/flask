@@ -15,7 +15,7 @@ import numpy as np
 import cv2
 import serial
 
-#ser=serial.Serial('/dev/ttyACM0', 9600)
+ser=serial.Serial('/dev/ttyACM0', 9600)
 
 def shutdown():
     os.system('shutdown now -h')
@@ -58,6 +58,6 @@ def relay(x):
     ser.write(x)
     return 
 
-def meter():
+def status():
     return ser.readline()
 
