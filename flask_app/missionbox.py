@@ -15,8 +15,8 @@ import numpy as np
 import cv2
 import serial
 
-ser=serial.Serial('/dev/ttyACM0', 9600)
-gps=serial.Serial('/dev/ttyUSB0', 4800)
+#ser=serial.Serial('/dev/ttyACM0', 9600)
+#gps=serial.Serial('/dev/ttyUSB0', 4800)
 
 def shutdown():
     os.system('shutdown now -h')
@@ -32,13 +32,6 @@ def load_video(f):
     cap.release()
     cv2.destroyAllwindows()
 
-# todo save video
-def save_video():
-    return
-
-# todo get data from /dev/video0
-def get_video():
-    return
 
 def start_stream():
     os.system('ffserver')
