@@ -36,12 +36,9 @@ buttonStop.onclick = function() {
             // alert(xhr.responseText);
 
             // enable download link
-            /*
             var downloadLink = document.getElementById("download");
-            var d = new Date();
             downloadLink.text = "Download Video";
-            downloadLink.href = "static/missionBoxVideo_" + d.getMonth() + "-" + d.getDay() + "-" + d.getFullYear() + ".avi";
-            */
+            downloadLink.href = "/static/video.avi";
         }
     }
     xhr.open("POST", "/record_status");
