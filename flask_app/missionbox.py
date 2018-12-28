@@ -66,7 +66,7 @@ def gps():
     lines=gps.readline()
     line=lines.split(',')
     if line[0]=='$GPGGA':
-        gps_data=line[2]+line[3]+','line[4]+line[5]
+        gps_data=line[2]+line[3]+','+line[4]+line[5]
         '''
         latitude=line[2]
         latDirec=line[3]
