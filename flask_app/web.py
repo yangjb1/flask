@@ -14,7 +14,8 @@ def hello():
 def control_panel():
     stream= mb.check_stream()
     status=mb.status();
-    return render_template('control_panel.html',stream=stream, status=status)
+    gps=mb.gps()
+    return render_template('control_panel.html',stream=stream,status=status,gps=gps)
 
 '''
 @app.route('/check_stream',methods=['get'])

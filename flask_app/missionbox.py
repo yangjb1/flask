@@ -16,6 +16,7 @@ import cv2
 import serial
 
 ser=serial.Serial('/dev/ttyACM0', 9600)
+gps=serial.Serial('/dev/ttyUSB0', 4800)
 
 def shutdown():
     os.system('shutdown now -h')
@@ -60,4 +61,17 @@ def relay(x):
 
 def status():
     return ser.readline()
+
+def gps():
+    lines=gps.readline()
+    line=lines.split(',')
+    if line[0]=='$GPGGA':
+        gps_data=line[2]+line[3]+','line[4]+line[5]
+        '''
+        latitude=line[2]
+        latDirec=line[3]
+        longtitude=line[4]
+        longDirec=line[5]
+        '''
+    return gps_data
 
