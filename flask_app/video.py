@@ -1,6 +1,7 @@
 #/usr/bin python
 import cv2
 import threading
+from datetime import datetime
 
 class RecordingThread (threading.Thread):
     def __init__(self, name, camera):
@@ -10,7 +11,10 @@ class RecordingThread (threading.Thread):
 
         self.cap = camera
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        self.out = cv2.VideoWriter('/static/video.avi',fourcc, 20.0, (640,480))
+        d=datetime.now()
+        filename='{}-{}-{}-{}-{}-{}'.format(d.year,d.month,d.day,d.hour,d.minute,d.second)
+        url='./static/missionboxVideo_'+filename+'.avi'
+        self.out = cv2.VideoWriter(url,fourcc, 20.0, (640,480))
 
     def run(self):
         while self.isRunning:
