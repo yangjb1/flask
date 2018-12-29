@@ -29,6 +29,9 @@ buttonStop.onclick = function() {
     buttonRecord.disabled = false;
     buttonStop.disabled = true;    
 
+    var downloadLink = document.getElementById("download");
+    downloadLink.text = "Download Video";
+    downloadLink.href = "/static/video.avi";
     // XMLHttpRequest
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -36,9 +39,6 @@ buttonStop.onclick = function() {
             // alert(xhr.responseText);
 
             // enable download link
-            var downloadLink = document.getElementById("download");
-            downloadLink.text = "Download Video";
-            downloadLink.href = "/static/video.avi";
         }
     }
     xhr.open("POST", "/record_status");

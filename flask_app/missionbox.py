@@ -6,7 +6,7 @@
 '''
 '''
 # import filename as xx     # import
-# xx.functionname           # calling function 
+# xx.functionname           # calling function
 '''
 
 import os
@@ -25,21 +25,19 @@ def load_video(f):
     cap=cv2.VideoCapture(f)
     while(True):
         ret,frame=cap.read()
-        gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('frame',gray)
+        cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
     cv2.destroyAllwindows()
 
-
 def start_stream():
     os.system('ffserver')
-    return 
+    return
 
 def stop_stream():
     os.system('pkill ffserver')
-    return 
+    return
 
 def check_stream():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -50,7 +48,7 @@ def check_stream():
 
 def relay(x):
     ser.write(x)
-    return 
+    return
 
 def status():
     return ser.readline()
@@ -67,4 +65,3 @@ def gps():
         longDirec=line[5]
         '''
     return gps_data
-

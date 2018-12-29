@@ -16,7 +16,7 @@ def hello():
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
     stream= mb.check_stream()
-    status=mb.status();
+    status=mb.status()
     gps=mb.gps()
     return render_template('control_panel.html',stream=stream,status=status,gps=gps)
 
@@ -52,7 +52,7 @@ def shutdown():
 
 @app.route('/record_status', methods=['POST'])
 def record_status():
-    global video_camera 
+    global video_camera
     if video_camera == None:
         video_camera = VideoCamera()
 
