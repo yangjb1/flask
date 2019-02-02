@@ -31,3 +31,20 @@ buttonStop.onclick = function(){
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");   
     xhr.send(JSON.stringify({ status: "false" }));
 }
+
+/*
+    stream
+*/
+var buttonRelay1 = document.getElementById("relay1");
+var buttonRelay2 = document.getElementById("relay2");
+var buttonRelay3 = document.getElementById("relay3");
+var buttonRelay4 = document.getElementById("relay4");
+
+buttonRelay1.onclick = function() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200);
+    }
+    xhr.open("POST", "/relay1");
+    xhr.send();
+}
