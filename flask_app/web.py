@@ -15,10 +15,9 @@ def hello():
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
-    stream= mb.check_stream()
     status=mb.status()
     #gps=mb.gps()
-    return render_template('control_panel.html',stream=stream, status=status)
+    return render_template('control_panel.html', status=status)
 
 '''
 @app.route('/check_stream',methods=['get'])
@@ -112,21 +111,29 @@ def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/relay1', methods = ['GET'])
+@app.route('/relay1', methods = ['POST'])
 def relay1():
-    mb.relay(6)
+    mb.relay('6')
+    status = mb.status()
+    return render_template('/control_panel.html', status=status)
 
 @app.route('/relay2')
 def relay2():
-    mb.relay(7)
+    mb.relay('7')
+    status = mb.status()
+    return render_template('/control_panel.html', status=status)
 
 @app.route('/relay3')
 def relay3():
-    mb.relay(8)
+    mb.relay('8')
+    status = mb.status()
+    return render_template('/control_panel.html', status=status)
 
 @app.route('/relay4')
 def relay4():
-    mb.relay(9)
+    mb.relay('9')
+    status = mb.status()
+    return render_template('/control_panel.html', status=status)
 
 if __name__ == '__main__':
     app.run(debug=True)

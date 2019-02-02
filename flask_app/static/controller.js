@@ -46,5 +46,6 @@ buttonRelay1.onclick = function() {
         if (xhr.readyState == 4 && xhr.status == 200);
     }
     xhr.open("POST", "/relay1");
-    xhr.send();
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UT-8");
+    xhr.send(JSON.stringify({ relay: "6"});
 }

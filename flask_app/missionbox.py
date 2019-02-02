@@ -15,7 +15,7 @@ import numpy as np
 import cv2
 import serial
 
-#ser=serial.Serial('/dev/ttyACM0', 9600)
+ser=serial.Serial('/dev/ttyACM0', 9600)
 #gps=serial.Serial('/dev/ttyUSB0', 4800)
 '''
 TODO:
@@ -44,6 +44,7 @@ def check_stream():
     return False
 
 def relay(x):
+    print x
     ser.write(x)
     return
 
