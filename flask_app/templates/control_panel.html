@@ -1,12 +1,49 @@
-control panel
 <!DOCTYPE html>
 <html>
-    <form action="/shutdown" method="get">
-        <button >shutdown</button>
+    <div>
+        <a href="/home">Home</a>
+        <a href="/control_panel">Control Panel</a>
+    </div>
+
+    <div id="streamer">
+        <button id="stream">Stream</button>
+        <button id="stop">Stop</button>
+        <script type="text/javascript" src="{{ url_for('static',      filename='controller.js') }}"></script>
+    </div>
+
+    <!--
+    <form action="/stream" method="get">
+        <button>Start Stream</button>
     </form>
+
+    <form action="/stop_stream" method="get">
+        <button>Stop Stream</button>
+    </form>
+    -->
+
+    <form action="/shutdown" method="get">
+        <button>shutdown</button>
+    </form>
+    <form action="/relay1" method="get">
+        <button>Relay1</button>
+    </form>
+    {{status[0]}}
+    <form action="/relay2" method="get">
+        <button>Relay2</button>
+    </form>
+    {{status[1]}}
+    <form action="/relay3" method="get">
+        <button>Relay3</button>
+    </form>
+    {{status[2]}}
+    <form action="/relay4" method="get">
+        <button>Relay4</button>
+    </form>
+    {{status[3]}}
     {{stream}}
     {{status}}
     {{gps}}
     <!-- refreshing page-->
+    <!--
     <meta http-equiv="refresh" content="5" >
 </html>

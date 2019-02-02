@@ -17,19 +17,16 @@ import serial
 
 #ser=serial.Serial('/dev/ttyACM0', 9600)
 #gps=serial.Serial('/dev/ttyUSB0', 4800)
-
+'''
+TODO:
+    -test gps
+    -add modem status
+'''
 def shutdown():
     os.system('shutdown now -h')
 
 def load_video(f):
-    cap=cv2.VideoCapture(f)
-    while(True):
-        ret,frame=cap.read()
-        cv2.imshow('frame',frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    cap.release()
-    cv2.destroyAllwindows()
+    os.system('vlc ' + f)
 
 def start_stream():
     os.system('ffserver')
@@ -51,7 +48,9 @@ def relay(x):
     return
 
 def status():
-    return ser.readline()
+    line = ser.readline()
+    line = line.split(',')
+    return line
 
 def gps():
     lines=gps.readline()

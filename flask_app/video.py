@@ -13,7 +13,7 @@ class RecordingThread (threading.Thread):
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         d=datetime.now()
         filename='{}-{}-{}-{}-{}-{}'.format(d.year,d.month,d.day,d.hour,d.minute,d.second)
-        url='./static/missionboxVideo_'+filename+'.avi'
+        url='./static/missionboxVideo_'+filename+'.mp4'
         self.out = cv2.VideoWriter(url,fourcc, 20.0, (640,480))
 
     def run(self):
