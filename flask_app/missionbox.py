@@ -26,7 +26,7 @@ def shutdown():
     os.system('shutdown now -h')
 
 def load_video(f):
-    os.system('vlc ' + f)
+    os.system('vlc static/' + f)
 
 def start_stream():
     os.system('ffserver')
@@ -49,8 +49,9 @@ def relay(x):
     return
 
 def status():
-    line = ser.readline()
-    line = line.split(',')
+    #line = ser.readline()
+    #line = line.split(',')
+    line = ''
     return line
 
 def gps():

@@ -24,25 +24,24 @@
     <form action="/shutdown" method="get">
         <button>shutdown</button>
     </form>
-    <form action="/relay1" method="POST">
+    <form action="/relay1" method="get">
         <button>Relay1</button>
     </form>
-    {{status[0]}}
     <form action="/relay2" method="get">
         <button>Relay2</button>
     </form>
-    {{status[1]}}
     <form action="/relay3" method="get">
         <button>Relay3</button>
     </form>
-    {{status[2]}}
     <form action="/relay4" method="get">
         <button>Relay4</button>
     </form>
-    {{status[3]}}
     {{stream}}
     {{status}}
     {{gps}}
+
+    {{ table }}
+    
     <!-- refreshing page-->
     <!--
     <meta http-equiv="refresh" content="5" >

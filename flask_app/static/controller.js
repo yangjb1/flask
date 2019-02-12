@@ -35,6 +35,7 @@ buttonStop.onclick = function(){
 /*
     stream
 */
+/*
 var buttonRelay1 = document.getElementById("relay1");
 var buttonRelay2 = document.getElementById("relay2");
 var buttonRelay3 = document.getElementById("relay3");
@@ -47,5 +48,6 @@ buttonRelay1.onclick = function() {
     }
     xhr.open("POST", "/relay1");
     xhr.setRequestHeader("Content-Type", "application/json;charset=UT-8");
-    xhr.send(JSON.stringify({ relay: "6"});
+    xhr.send(JSON.stringify({ relay: "6"}));
 }
+*/

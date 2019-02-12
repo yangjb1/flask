@@ -3,6 +3,9 @@ from flask import Flask, render_template, Response, request, jsonify, redirect, 
 import missionbox as mb
 import os
 from video import VideoCamera
+import fnmatch
+from flask_table import Table, Col
+
 
 app=Flask(__name__)
 video_camera = None
@@ -11,20 +14,48 @@ global_frame = None
 @app.route('/')
 @app.route('/home')
 def hello():
-    return render_template('home.html')
+    return render_template('home.html', fileNames=fileFilter())
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
-    status=mb.status()
+    #status=mb.status()
     #gps=mb.gps()
-    return render_template('control_panel.html', status=status)
+    return render_template('control_panel.html', table=table)
 
+@app.route("/loadVideo" , methods=['GET', 'POST'])
+def loadVideo():
+    select = request.form.get('videos')
+    mb.load_video(str(select))
+    return render_template('home.html', fileNames=fileFilter())
+    #return(str(select)) # just to see what select is
 '''
 @app.route('/check_stream',methods=['get'])
 def check_stream():
     stream= mb.check_stream()
     return render_template('control_panel.html', stream=stream)
 '''
+
+def fileFilter():
+    return fnmatch.filter(os.listdir('static'), '*.mp4')
+
+class ItemTable(Table):
+    name = Col('Device')
+    description = Col('Reading')
+
+# Get some objects
+class Item(object):
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+#itemList=mb.status()[4:7]
+items = [Item('PC Voltage', 'Description1'),
+         Item('Name2', 'Description2'),
+         Item('Name3', 'Description3'),
+         Item('Name3', 'Description3')]
+
+
+# Populate the table
+table = ItemTable(items)
 
 @app.route('/handle_stream', methods=["POST"])
 def handle_stream():
@@ -54,18 +85,6 @@ def stop_stream():
 @app.route('/load_video')
 def load_video():
     return render_template('load_video.html')
-#mb.load_video('static/missionboxVideo_2018-12-29-1-51-55.avi')
-
-@app.route('/load_video_post', methods=['GET','POST'])
-def load_video_post():
-    if request.method == 'POST':
-        video_file = request.form['f']
-        #mb.load_video(video_file)
-        return
-    else:
-        video_file = request.args.get('f')
-        #mb.load_video(video_file)
-        return
 
 @app.route('/shutdown')
 def shutdown():
@@ -111,7 +130,7 @@ def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/relay1', methods = ['POST'])
+@app.route('/relay1')
 def relay1():
     mb.relay('6')
     status = mb.status()
