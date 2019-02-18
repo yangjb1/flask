@@ -25,7 +25,7 @@
         <button>shutdown</button>
     </form>
     <form action="/relay1" method="get">
-        <button>Relay1</button>
+        <button id="relay1">Relay1</button>
     </form>
     <form action="/relay2" method="get">
         <button>Relay2</button>
@@ -41,6 +41,13 @@
     {{gps}}
 
     {{ table }}
+
+    <script>
+        if ('{{ status[3] }}' == 1)
+            document.getElementById("relay1").innerHTML="Relay1 On";
+        else if ('{{ status[3] }}' == 0)
+            document.getElementById("relay1").innerHTML="relay1 Off";
+    </script>
     
     <!-- refreshing page-->
     <!--
