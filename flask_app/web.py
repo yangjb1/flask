@@ -12,25 +12,32 @@ import psutil
 app=Flask(__name__)
 video_camera = None
 global_frame = None
+video_on = False
 
 @app.route('/')
 @app.route('/home')
 def hello():
+    logFile()
     f.write('home page\n')
+    f.flush()
     return render_template('home.html', fileNames=fileFilter())
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
-    #status=mb.status()
+    status=mb.status()
     #gps=mb.gps()
+    logFile()
     f.write('control_panel page\n')
-    return render_template('control_panel.html', table=table)
+    f.flush()
+    return render_template('control_panel.html', status=status, table=tableValue(status))
 
 @app.route("/loadVideo" , methods=['GET', 'POST'])
 def loadVideo():
     select = request.form.get('videos')
     mb.load_video(str(select))
+    logFile()
     f.write('loadVideo ' + str(select) + '\n')
+    f.flush()
     return render_template('home.html', fileNames=fileFilter())
     # return(str(select)) # just to see what select is
 
@@ -63,9 +70,9 @@ items = [Item('PC Voltage', 'Description1'),
 # Populate the table
 table = ItemTable(items)
 
-def tableValue():
-    itemList = mb.status()
-    itemList = itemList.spilt(',')
+def tableValue(itemList):
+    # itemList = mb.status()
+    itemList = itemList.split(',')
     items = [Item('PC Voltage', itemList[0]),
              Item('Current', itemList[1])]
     table = ItemTable(items)
@@ -79,11 +86,13 @@ def handle_stream():
 
     if status == "true":
         stream()
+        logFile()
         f.write('stream on')
         f.flush()
         return jsonify(result="started")
     else:
         stop_stream()
+        logFile()
         f.write('stream off')
         f.flush()
         return jsonify(result="stoped")
@@ -118,13 +127,17 @@ def record_status():
 
     if status == "true":
         video_camera.start_record()
+        logFile()
         f.write('capture on')
         f.flush()
+        video_on = True
         return jsonify(result="started")
     else:
         video_camera.stop_record()
+        logFile()
         f.write('capture off')
         f.flush()
+        video_on = False
         return jsonify(result="stopped")
 
 def video_stream():
@@ -154,33 +167,37 @@ def video_viewer():
 def relay1():
     mb.relay('6')
     status = mb.status()
+    logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status)
+    return render_template('/control_panel.html', status=status, table=tableValue(status))
 
 @app.route('/relay2')
 def relay2():
     mb.relay('7')
     status = mb.status()
+    logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status)
+    return render_template('/control_panel.html', status=status, table=tableValue(status))
 
 @app.route('/relay3')
 def relay3():
     mb.relay('8')
     status = mb.status()
+    logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status)
+    return render_template('/control_panel.html', status=status, table=tableValue(status))
 
 @app.route('/relay4')
 def relay4():
     mb.relay('9')
     status = mb.status()
+    logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status)
+    return render_template('/control_panel.html', status=status, table=tableValue(satus))
 
 
 f=open('logFile', 'a+')
@@ -192,7 +209,7 @@ f.flush()
 def logFile():
     timeNow = (str(datetime.now()))
     cpu = str(psutil.cpu_percent(interval=1))
-    f.write(timeNow + ',' + cpu)
+    f.write(timeNow + ',' + cpu + ',')
     f.flush()
 
 
