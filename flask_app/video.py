@@ -10,11 +10,12 @@ class RecordingThread (threading.Thread):
         self.isRunning = True
 
         self.cap = camera
+	size = (int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         d=datetime.now()
         filename='{}-{}-{}-{}-{}-{}'.format(d.year,d.month,d.day,d.hour,d.minute,d.second)
         url='./static/missionboxVideo_'+filename+'.mp4'
-        self.out = cv2.VideoWriter(url,fourcc, 20.0, (640,480))
+        self.out = cv2.VideoWriter(url, fourcc, 30.0, size)
 
     def run(self):
         while self.isRunning:
@@ -34,6 +35,8 @@ class VideoCamera(object):
     def __init__(self):
         # Open a camera
         self.cap = cv2.VideoCapture('/dev/video0')
+	self.cap.set(3, 1920)
+	self.cap.set(4, 1080)
 
         # Initialize video recording environment
         self.is_record = False
