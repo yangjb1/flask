@@ -14,13 +14,27 @@ video_camera = None
 global_frame = None
 video_on = False
 
+@app.route('/handle_streaming')
+def handle_streaming():
+    current_status = request.args.get('streamStatus')
+    if current_status == 'False':
+        stream()
+        return 'True'
+    else:
+        stop_stream()
+        return 'False'
+    return 'True' if current_status == 'False' else 'False'
+
 @app.route('/')
 @app.route('/home')
 def hello():
+    video_camera = VideoCamera()
+    print video_camera.get_is_record()
     logFile()
     f.write('home page\n')
     f.flush()
-    return render_template('home.html', fileNames=fileFilter())
+    tables='1,1,1,1,1,1,1,1'
+    return render_template('home.html', fileNames=fileFilter(), table=tableValue(tables))
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
@@ -60,20 +74,13 @@ class Item(object):
     def __init__(self, name, description):
         self.name = name
         self.description = description
-# itemList=mb.status()[0:4]
-items = [Item('PC Voltage', 'Description1'),
-         Item('Current', 'Description2')]
-         # Item('Name3', 'Description3'),
-         # Item('Name3', 'Description3')]
-
-
-# Populate the table
-table = ItemTable(items)
 
 def tableValue(itemList):
     # itemList = mb.status()
     itemList = itemList.split(',')
     items = [Item('PC Voltage', itemList[0]),
+             Item('Current', itemList[1]),
+             Item('PC Voltage', itemList[0]),
              Item('Current', itemList[1])]
     table = ItemTable(items)
     return table
@@ -109,7 +116,7 @@ def stop_stream():
 
 @app.route('/load_video')
 def load_video():
-    return render_template('load_video.html')
+    return render_template('load_video.html', streaming=mb.check_stream())
 
 @app.route('/shutdown')
 def shutdown():
@@ -127,6 +134,7 @@ def record_status():
 
     if status == "true":
         video_camera.start_record()
+        print video_camera.get_is_record()
         logFile()
         f.write('capture on')
         f.flush()
@@ -134,6 +142,7 @@ def record_status():
         return jsonify(result="started")
     else:
         video_camera.stop_record()
+        print video_camera.get_is_record()
         logFile()
         f.write('capture off')
         f.flush()
@@ -170,7 +179,7 @@ def relay1():
     logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status, table=tableValue(status))
+    return render_template('/home=.html', status=status, table=tableValue(status))
 
 @app.route('/relay2')
 def relay2():
@@ -179,7 +188,7 @@ def relay2():
     logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status, table=tableValue(status))
+    return render_template('/home.html', status=status, table=tableValue(status))
 
 @app.route('/relay3')
 def relay3():
@@ -188,7 +197,7 @@ def relay3():
     logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status, table=tableValue(status))
+    return render_template('/home.html', status=status, table=tableValue(status))
 
 @app.route('/relay4')
 def relay4():
@@ -197,7 +206,7 @@ def relay4():
     logFile()
     f.write(status)
     f.flush()
-    return render_template('/control_panel.html', status=status, table=tableValue(satus))
+    return render_template('/home.html', status=status, table=tableValue(satus))
 
 
 f=open('logFile', 'a+')

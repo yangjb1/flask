@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title></title>
-    </head>
-    <div>
-        <a href="/home">Home</a>
-        <a href="/control_panel">Control Panel</a>
-    </div>
+<div id="recorder">
+    <button id="record">Record</button>
+    <button id="stop">Stop</button>
+    <a id="download"></a>
+</div>
 
-    <body>
-        <h1>Home</h1>
-        <div id="recorder">
-            <button id="record">Record</button>
-            <button id="stop">Stop</button>
-            <a id="download"></a>
-            <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
-        </div>
-        <img id="video" src="{{ url_for('video_viewer') }}">
-        <form action="/load_video" method="post" enctype=multipart/form-data>
-            <button type="file" >load video </button>
-        </form>
-        <form action="{{ url_for('loadVideo') }}" method="POST">
+<script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
+<div>
+<div style="float: left">
+    <img id="video" width="640" height="480" src="{{ url_for('video_viewer') }}">
+    <form action="{{ url_for('loadVideo') }}" method="POST">
         <select name="videos">
             {% for fileName in fileNames %}
             <option value="{{fileName}}">{{fileName}}</option>
             {% endfor %}
         </select>
         <button type='submit'>Load</button>
-        </form>
-    </body>
+    </form>
+</div>
+
+<div style="float: right;">
+    <form action="/shutdown" method="get">
+        <button>shutdown</button>
+    </form>
+    <form action="/relay1" method="get">
+        <button id="relay1">Relay1</button>
+    </form>
+    <form action="/relay2" method="get">
+        <button>Relay2</button>
+    </form>
+    <form action="/relay3" method="get">
+        <button>Relay3</button>
+    </form>
+    <form action="/relay4" method="get">
+        <button>Relay4</button>
+    </form>
+    <div>
+        {{ table }}
+    </div>
+</div>
+</div>
 </html>
