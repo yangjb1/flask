@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+        <style>
+        .slow .toggle-group { transition: left 0.7s; -webkit-transition: left .8s; }
+        </style>
+    </head>
+<body>
 <div id="recorder">
+    Video Record
     <button id="record">Record</button>
     <button id="stop">Stop</button>
-    <a id="download"></a>
+    <a id="download" hidden="true"></a>
+
+    &nbsp; stream
+    <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+    <div id='streamStatus' hidden=true>{{ streaming }}</div>
+
+    &nbsp; Relay1
+    <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+    <div id='relay1Status' hidden=true>{{ 1 }}</div>
+
+    &nbsp; Relay2
+    <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+    <div id='relay2Status' hidden=true>{{ 1 }}</div>
+
+
 </div>
+<div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
-<div>
 <div style="float: left">
-    <img id="video" width="640" height="480" src="{{ url_for('video_viewer') }}">
+    <!--16:9-->
+    <img id="video" width="768" height="432" src="{{ url_for('video_viewer') }}">
     <form action="{{ url_for('loadVideo') }}" method="POST">
         <select name="videos">
             {% for fileName in fileNames %}
@@ -18,27 +46,174 @@
         </select>
         <button type='submit'>Load</button>
     </form>
+
 </div>
 
 <div style="float: right;">
+
+    <table>
+        <tr>
+            <th>Attribute</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Modem Power</td>
+            <td id="pwrState">N/A</td>
+        </tr>
+        <tr>
+            <td>Network State</td>
+            <td id="netState">N/A</td>
+        </tr>
+        <tr>
+            <td>Network Channel</td>
+            <td id="netChan">N/A</td>
+        </tr>
+        <tr>
+            <td>Signal Strength</td>
+            <td id="sigStrength">N/A</td>
+        </tr>
+        <tr>
+            <td>Network Service</td>
+            <td id="netServ">N/A</td>
+        </tr>
+        <tr>
+            <td>WAN IP</td>
+            <td id="wanIP">N/A</td>
+        </tr>
+        <tr>
+            <td>GPS Fix</td>
+            <td id="gpsFix">N/A</td>
+        </tr>
+        <tr>
+            <td>Satellite Count</td>
+            <td id="satCount">N/A</td>
+        </tr>
+        <tr>
+            <td>Latitude</td>
+            <td id="latitude">N/A</td>
+        </tr>
+        <tr>
+            <td>Longitude</td>
+            <td id="longitude">N/A</td>
+        </tr>
+        <tr>
+            <td>PC Voltage (V)</td>
+            <td id="pcVoltage">N/A</td>
+        </tr>
+        <tr>
+            <td>PC Current (A)</td>
+            <td id="pcCurrent">N/A</td>
+        </tr>
+        <tr>
+            <td>12V (V)</td>
+            <td id="v12">N/A</td>
+        </tr>
+        <tr>
+            <td>5V (V)</td>
+            <td id="v5">N/A</td>
+        </tr>
+    </table>
+    <!--
+    <div id="table">
+
+        {{ table }}
+
+    </div>
+    -->
+    <div id="tablePrint"> </div>
+
     <form action="/shutdown" method="get">
         <button>shutdown</button>
     </form>
-    <form action="/relay1" method="get">
-        <button id="relay1">Relay1</button>
-    </form>
-    <form action="/relay2" method="get">
-        <button>Relay2</button>
-    </form>
-    <form action="/relay3" method="get">
-        <button>Relay3</button>
-    </form>
-    <form action="/relay4" method="get">
-        <button>Relay4</button>
-    </form>
-    <div>
-        {{ table }}
-    </div>
 </div>
 </div>
+</body>
+
+<script>
+    setInterval(function(){ setStatus() }, 3000);
+
+    var current_status = $('#streamStatus').text();
+        if (current_status == 'True') {
+          $('#stream').bootstrapToggle('on');
+        } else {
+          $('#stream').bootstrapToggle('off');
+        }
+    var relay1Status = $('#relay12Status').text();
+        if (relay1Status == 'True') {
+          $('#relay21').bootstrapToggle('on');
+        } else {
+          $('#relay21').bootstrapToggle('off');
+        }
+    $(function() {
+        $('#stream').change(function() {
+            //$('#streamStatus').html($(this).prop('checked'))
+            var current_status = $('#streamStatus').text();
+                $.ajax({
+                    url:"/handle_streaming",
+                    type:"get",
+                    data: {streamStatus: current_status},
+                    success: function(response) {
+                        $("#streamStatus").html(response);
+                    }
+                })
+            if (current_status == 'True') {
+                $('#streamStatus').html('False');
+            } else {
+                $('#streamStatus').html('True');
+            }
+        })
+
+
+        $('#relay1').change(function() {
+            var current_status = $('#relay1Status').text();
+            $.ajax({
+                url:"/relay1",
+                type:"get",
+                data: {relay1Status: current_status},
+                success: function(response) {
+                    $("#relay1Status").html(response);
+                }
+            })
+            if (current_status == 'True') {
+                $('#relay1Status').html('False');
+            } else {
+                $('#relay1Status').html('True');
+            }
+        })
+
+        $('#relay2').change(function() {
+            var current_status = $('#relay2Status').text();
+            $.ajax({
+                url:"/relay2",
+                type:"get",
+                data: {relay2Status: current_status},
+                success: function(response) {
+                    $("#relay2Status").html(response);
+                }
+            })
+            if (current_status == 'True') {
+                $('#relay2Status').html('False');
+            } else {
+                $('#relay2Status').html('True');
+            }
+        })
+    })
+
+    function setStatus(){
+        document.getElementById("pwrState").innerHTML = "something";
+        document.getElementById("netState").innerHTML = "something";
+        document.getElementById("netChan").innerHTML = "something";
+        document.getElementById("sigStrength").innerHTML = "something";
+        document.getElementById("netServ").innerHTML = "something";
+        document.getElementById("wanIP").innerHTML = "something";
+        document.getElementById("gpsFix").innerHTML = "something";
+        document.getElementById("satCount").innerHTML = "something";
+        document.getElementById("latitude").innerHTML = "something";
+        document.getElementById("longitude").innerHTML = "something";
+        document.getElementById("pcVoltage").innerHTML = "something";
+        document.getElementById("pcCurrent").innerHTML = "something";
+        document.getElementById("v12").innerHTML = "something";
+        document.getElementById("v5").innerHTML = "something";
+    }
+</script>
 </html>

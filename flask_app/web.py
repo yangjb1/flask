@@ -4,7 +4,6 @@ import missionbox as mb
 import os
 from video import VideoCamera
 import fnmatch
-from flask_table import Table, Col
 from datetime import datetime
 import psutil
 
@@ -23,18 +22,34 @@ def handle_streaming():
     else:
         stop_stream()
         return 'False'
-    return 'True' if current_status == 'False' else 'False'
+    # return 'True' if current_status == 'False' else 'False'
+
+@app.route('/relay1')
+def relay1():
+    relay1Status = request.args.get('relay1Status')
+    #mb.relay('6')
+    if relay1Status == 'False':
+        return 'True'
+    else:
+        return 'False'
+
+@app.route('/relay2')
+def relay2():
+    relay2Status = request.args.get('relay2Status')
+    #mb.relay('6')
+    if relay2Status == 'False':
+        return 'True'
+    else:
+        return 'False'
 
 @app.route('/')
 @app.route('/home')
 def hello():
     video_camera = VideoCamera()
-    print video_camera.get_is_record()
     logFile()
     f.write('home page\n')
     f.flush()
-    tables='1,1,1,1,1,1,1,1'
-    return render_template('home.html', fileNames=fileFilter(), table=tableValue(tables))
+    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
@@ -43,7 +58,7 @@ def control_panel():
     logFile()
     f.write('control_panel page\n')
     f.flush()
-    return render_template('control_panel.html', status=status, table=tableValue(status))
+    return render_template('control_panel.html', status=status)
 
 @app.route("/loadVideo" , methods=['GET', 'POST'])
 def loadVideo():
@@ -63,27 +78,9 @@ def check_stream():
 '''
 
 def fileFilter():
-    return fnmatch.filter(os.listdir('static'), '*.mp4')
-
-class ItemTable(Table):
-    name = Col('Attribute')
-    description = Col('Value')
-
-# Get some objects
-class Item(object):
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
-
-def tableValue(itemList):
-    # itemList = mb.status()
-    itemList = itemList.split(',')
-    items = [Item('PC Voltage', itemList[0]),
-             Item('Current', itemList[1]),
-             Item('PC Voltage', itemList[0]),
-             Item('Current', itemList[1])]
-    table = ItemTable(items)
-    return table
+    files = fnmatch.filter(os.listdir('static'), '*.mp4')
+    files.sort()
+    return files
 
 @app.route('/handle_stream', methods=["POST"])
 def handle_stream():
@@ -134,7 +131,6 @@ def record_status():
 
     if status == "true":
         video_camera.start_record()
-        print video_camera.get_is_record()
         logFile()
         f.write('capture on')
         f.flush()
@@ -142,7 +138,6 @@ def record_status():
         return jsonify(result="started")
     else:
         video_camera.stop_record()
-        print video_camera.get_is_record()
         logFile()
         f.write('capture off')
         f.flush()
@@ -171,7 +166,7 @@ def video_stream():
 def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
+'''
 @app.route('/relay1')
 def relay1():
     mb.relay('6')
@@ -206,8 +201,8 @@ def relay4():
     logFile()
     f.write(status)
     f.flush()
-    return render_template('/home.html', status=status, table=tableValue(satus))
-
+    return render_template('/home.html', status=status, table=tableValue(status))
+'''
 
 f=open('logFile', 'a+')
 f.write('----------------------------------------\n')

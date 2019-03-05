@@ -1,4 +1,76 @@
-load video
 <html>
-    <button type="button" onclicke="{{mb.load_video('../missionbox/missionBox/Videos/missionBoxVideo_6-4-2018.webm')}}">load video </button>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<style>
+  .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 1s; }
+</style>
+    </head>
+    <body>
+    stream
+    <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+    <div id='streamStatus' hidden=true>{{ streaming }}</div>
+
+    <input id="stream2" type="checkbox" class='toggle' data-toggle="toggle">
+    <!--
+    <div id='streamStatus' class='status' >True</div>
+    <button class="btn btn-default" id="stream">Button</button>
+    <div id='streamStatus' class='status' >{{streaming}} </div>
+    <button class="btn btn-default" id="relay1">Button</button>
+    -->
+    </body>
+    <script>
+      var current_status = $('#streamStatus').text();
+      if (current_status == 'True') {
+          $('#stream').bootstrapToggle('on');
+      } else {
+          $('#stream').bootstrapToggle('off');
+      }
+
+      $(function() {
+          $('#stream').change(function() {
+          //$('#streamStatus').html($(this).prop('checked'))
+              var current_status = $('#streamStatus').text();
+              $.ajax({
+                  url:"/handle_streaming",
+                  type:"get",
+                  data: {streamStatus: current_status},
+                  success: function(response) {
+                      $("#streamStatus").html(response);
+                  }
+              })
+              if (current_status == 'True') {
+                  $('#streamStatus').html('False');
+              } else {
+                  $('#streamStatus').html('True');
+              }
+          })
+      })
+
+  /* test code
+  $(document).ready(function() {
+    $('.toggle').click(function() {
+      var current_status = $('#streamStatus').text();
+        $.ajax({
+            url:"/handle_streaming",
+            type:"get",
+            data: {streamStatus: current_status},
+            success: function(response) {
+                $("#streamStatus").html(response);
+            }
+        });
+      if (current_status == 'True') {
+          $('#streamStatus').html('False');
+      } else {
+          $('#streamStatus').html('True');
+      }
+    });
+       //refreshing page once every 2s
+       //setTimeout(location.reload.bind(location), 200);
+  });
+  */
+ </script>
 </html>
