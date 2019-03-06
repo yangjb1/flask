@@ -7,7 +7,6 @@ import fnmatch
 from datetime import datetime
 import psutil
 
-
 app=Flask(__name__)
 video_camera = None
 global_frame = None
@@ -27,7 +26,7 @@ def handle_streaming():
 @app.route('/relay1')
 def relay1():
     relay1Status = request.args.get('relay1Status')
-    #mb.relay('6')
+    mb.relay('6')
     if relay1Status == 'False':
         return 'True'
     else:
@@ -36,7 +35,7 @@ def relay1():
 @app.route('/relay2')
 def relay2():
     relay2Status = request.args.get('relay2Status')
-    #mb.relay('6')
+    mb.relay('7')
     if relay2Status == 'False':
         return 'True'
     else:
@@ -49,7 +48,12 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
-    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
+    status=mb.status()
+    temp=status.split(',')
+    if len(temp) == 6:
+        return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream(),status=status)
+    else: 
+        return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
@@ -166,6 +170,8 @@ def video_stream():
 def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
 '''
 @app.route('/relay1')
 def relay1():

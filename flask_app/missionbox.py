@@ -15,7 +15,7 @@ import numpy as np
 import cv2
 import serial
 
-ser=serial.Serial('/dev/ttyACM0', 19200)
+ser=serial.Serial('/dev/ttyACM0', 9600)
 #gps=serial.Serial('/dev/ttyUSB0', 4800)
 
 '''
