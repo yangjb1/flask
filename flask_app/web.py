@@ -48,12 +48,17 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
+    status = mb.status()
+    status = status.split(',')
+    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream(),status=status)
+    '''
     status=mb.status()
     temp=status.split(',')
     if len(temp) == 6:
         return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream(),status=status)
     else: 
         return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
+    '''
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():

@@ -125,6 +125,7 @@
     <form action="/shutdown" method="get">
         <button>shutdown</button>
     </form>
+    <p id="p1"> </p>
 </div>
 </div>
 </body>
@@ -210,10 +211,21 @@
         document.getElementById("satCount").innerHTML = "something";
         document.getElementById("latitude").innerHTML = "something";
         document.getElementById("longitude").innerHTML = "something";
-        document.getElementById("pcVoltage").innerHTML = "something";
-        document.getElementById("pcCurrent").innerHTML = "something";
-        document.getElementById("v12").innerHTML = "something";
-        document.getElementById("v5").innerHTML = "something";
+	$.ajax({
+    	    type: "get",
+    	    url: "url of server side script",
+            success: function(res){
+                console.log(res);
+    	},
+	document.getElementById("pcVoltage").innerHTML = {{status[0]}};
+	document.getElementById("pcCurrent").innerHTML = {{status[1]}};
+	document.getElementById("v12").innerHTML = {{status[2]}};
+	document.getElementById("v5").innerHTML = {{status[3]}};
+        
+	var x = '{{ status[0] }}';
+	console.log(x);
+	document.getElementById("p1").innerHTML = x;
+
     }
 </script>
 </html>
