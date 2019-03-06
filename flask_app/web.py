@@ -45,7 +45,7 @@ def relay2():
 def table():
     #table = '0,1,1,1,1,1,1'
     table = mb.status()
-    table = table.split(',')
+    #table = table.split(',')
     return table
 
 @app.route('/')
