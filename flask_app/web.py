@@ -41,6 +41,13 @@ def relay2():
     else:
         return 'False'
 
+@app.route('/table')
+def table():
+    #table = '0,1,1,1,1,1,1'
+    table = mb.status()
+    table = table.split(',')
+    return table
+
 @app.route('/')
 @app.route('/home')
 def hello():
@@ -48,9 +55,10 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
-    status = mb.status()
-    status = status.split(',')
-    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream(),status=status)
+    #table = '1,1,1,1,1,1,1'
+    #status = mb.status()
+    #table = table.split(',')
+    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
     '''
     status=mb.status()
     temp=status.split(',')

@@ -211,20 +211,18 @@
         document.getElementById("satCount").innerHTML = "something";
         document.getElementById("latitude").innerHTML = "something";
         document.getElementById("longitude").innerHTML = "something";
-	$.ajax({
+	    $.ajax({
     	    type: "get",
-    	    url: "url of server side script",
-            success: function(res){
-                console.log(res);
-    	},
-	document.getElementById("pcVoltage").innerHTML = {{status[0]}};
-	document.getElementById("pcCurrent").innerHTML = {{status[1]}};
-	document.getElementById("v12").innerHTML = {{status[2]}};
-	document.getElementById("v5").innerHTML = {{status[3]}};
-        
-	var x = '{{ status[0] }}';
-	console.log(x);
-	document.getElementById("p1").innerHTML = x;
+    	    url: "/table",
+            success: function(data){
+                var table=data.split(',');
+                document.getElementById("pcVoltage").innerHTML = table[0];
+	            document.getElementById("pcCurrent").innerHTML = table[1];
+	            document.getElementById("v12").innerHTML = table[2];
+	            document.getElementById("v5").innerHTML = table[3];
+    	    },
+    	})
+
 
     }
 </script>
