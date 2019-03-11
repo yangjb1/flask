@@ -12,7 +12,10 @@
         </style>
     </head>
 <body>
-<div id="recorder">
+<div style="float: left">
+    <!--16:9-->
+    <img id="video" width="768" height="432" src="{{ url_for('video_viewer') }}">
+    <div id="recorder">
     Video Record
     <button id="record">Record</button>
     <button id="stop">Stop</button>
@@ -30,25 +33,13 @@
     <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
     <div id='relay2Status' hidden=true>{{ relay2 }}</div>
 
+    <div>
+    &nbsp; Video Playback
+    <button onclick='window.open("load_video")'>Video Playback</button>
+    </div>
 
 </div>
-<div>
-
-<script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
-<div style="float: left">
-    <!--16:9-->
-    <img id="video" width="768" height="432" src="{{ url_for('video_viewer') }}">
-    <form action="{{ url_for('loadVideo') }}" method="POST">
-        <select name="videos">
-            {% for fileName in fileNames %}
-            <option value="{{fileName}}">{{fileName}}</option>
-            {% endfor %}
-        </select>
-        <button type='submit'>Load</button>
-    </form>
-
 </div>
-
 <div style="float: right;">
 
     <table>
@@ -97,12 +88,12 @@
             <td id="longitude">N/A</td>
         </tr>
         <tr>
-            <td>PC Voltage (V)</td>
-            <td id="pcVoltage">N/A</td>
-        </tr>
-        <tr>
             <td>PC Current (A)</td>
             <td id="pcCurrent">N/A</td>
+        </tr>
+        <tr>
+            <td>PC Voltage (V)</td>
+            <td id="pcVoltage">N/A</td>
         </tr>
         <tr>
             <td>12V (V)</td>
@@ -112,14 +103,12 @@
             <td>5V (V)</td>
             <td id="v5">N/A</td>
         </tr>
+        <tr>
+            <td>Voltage (V)</td>
+            <td id="voltage">N/A</td>
+        </tr>
     </table>
-    <!--
-    <div id="table">
 
-        {{ table }}
-
-    </div>
-    -->
     <div id="tablePrint"> </div>
 
     <form action="/shutdown" method="get">
@@ -127,8 +116,26 @@
     </form>
     <p id="p1"> </p>
 </div>
+<!--
+<div>
+
+    <form action="{{ url_for('loadVideo') }}" method="POST">
+        <select name="videos">
+            {% for fileName in fileNames %}
+            <option value="{{fileName}}">{{fileName}}</option>
+            {% endfor %}
+        </select>
+        <button type='submit'>Load</button>
+    </form>
+
+    <input type="file" name="myFile"><br><br>
+
+
 </div>
+-->
+
 </body>
+<script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
 
 <script>
     setInterval(function(){ setStatus() }, 5000);
@@ -215,11 +222,12 @@
     	    type: "get",
     	    url: "/table",
             success: function(data){
-                var table=data.split(',');
-                document.getElementById("pcVoltage").innerHTML = table[0];
-	            document.getElementById("pcCurrent").innerHTML = table[1];
+              var table=data.split(',');
+	            document.getElementById("pcCurrent").innerHTML = table[0];
+              document.getElementById("pcVoltage").innerHTML = table[1];
 	            document.getElementById("v12").innerHTML = table[2];
 	            document.getElementById("v5").innerHTML = table[3];
+              document.getElementById("voltage").innerHTML = table[4];
     	    },
     	})
 

@@ -11,7 +11,7 @@ class RecordingThread (threading.Thread):
 
         self.cap = camera
 	size = (int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+        fourcc = cv2.VideoWriter_fourcc(*'H264')
         d=datetime.now()
         filename='{}-{}-{}-{}-{}-{}'.format(d.year,d.month,d.day,d.hour,d.minute,d.second)
         url='./static/missionboxVideo_'+filename+'.mp4'
