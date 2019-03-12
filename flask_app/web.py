@@ -58,7 +58,7 @@ def hello():
     #table = '1,1,1,1,1,1,1'
     #status = mb.status()
     #table = table.split(',')
-    return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
+    return render_template('home.html', streaming=mb.check_stream())
     '''
     status=mb.status()
     temp=status.split(',')
@@ -93,11 +93,6 @@ def check_stream():
     stream= mb.check_stream()
     return render_template('control_panel.html', stream=stream)
 '''
-
-def fileFilter():
-    files = fnmatch.filter(os.listdir('static'), '*.mp4')
-    files.sort()
-    return files
 
 @app.route('/handle_stream', methods=["POST"])
 def handle_stream():
