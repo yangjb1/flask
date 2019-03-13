@@ -6,6 +6,14 @@
         <script src="/static/bootstrap.min.js"></script>
         <link href="/static/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="/static/bootstrap-toggle.min.js"></script>
+<style>
+body {
+      background-color: rgb(78,50,72);
+}
+div {
+  color:white;
+}
+</style>
 
         <!--
         <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
@@ -22,16 +30,31 @@
         </style>
     </head>
 <body>
+<h1>
+    <span style="color:red">MISSION</span><span style="color:white"> BOX</span>
+</h1>
 <div style="float: left">
     <!--16:9-->
-    <img id="video" width="768" height="432" src="{{ url_for('video_viewer') }}">
+    <div>
+    <h4>LIVE STREAM</h4>
+    </div>
+    <img id="video" width="672" height="378" src="{{ url_for('video_viewer') }}">
     <div id="recorder">
+    <div>
     Video Record
     <button id="record">Record</button>
     <button id="stop">Stop</button>
     <a id="download" hidden="true"></a>
+    &nbsp; Video Playback
+    <button onclick='window.open("load_video")'>Video Playback</button>
+    </div>
+        <div>
+            <h4>
+                DEVICE CONTROL
+            </h4>
+        </div>
 
-    &nbsp; stream
+    Stream
     <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
     <div id='streamStatus' hidden=true>{{ streaming }}</div>
 
@@ -43,19 +66,21 @@
     <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
     <div id='relay2Status' hidden=true>{{ relay2 }}</div>
 
-    <div>
-    &nbsp; Video Playback
-    <button onclick='window.open("load_video")'>Video Playback</button>
-    </div>
+
 
 </div>
 </div>
 <div style="float: right;">
 
+    <div>
+        <h4>
+            SYSTEM STATUS
+        </h4>
+    </div>
     <table>
         <tr>
-            <th>Attribute</th>
-            <th>Value</th>
+            <th>ATTRIBUTE</th>
+            <th>VALUE</th>
         </tr>
         <tr>
             <td>Modem Power</td>
@@ -218,16 +243,16 @@
     })
 
     function setStatus(){
-        document.getElementById("pwrState").innerHTML = "something";
-        document.getElementById("netState").innerHTML = "something";
-        document.getElementById("netChan").innerHTML = "something";
-        document.getElementById("sigStrength").innerHTML = "something";
-        document.getElementById("netServ").innerHTML = "something";
-        document.getElementById("wanIP").innerHTML = "something";
-        document.getElementById("gpsFix").innerHTML = "something";
-        document.getElementById("satCount").innerHTML = "something";
-        document.getElementById("latitude").innerHTML = "something";
-        document.getElementById("longitude").innerHTML = "something";
+        document.getElementById("pwrState").innerHTML = "N/A";
+        document.getElementById("netState").innerHTML = "N/A";
+        document.getElementById("netChan").innerHTML = "N/A";
+        document.getElementById("sigStrength").innerHTML = "N/A";
+        document.getElementById("netServ").innerHTML = "N/A";
+        document.getElementById("wanIP").innerHTML = "N/A";
+        document.getElementById("gpsFix").innerHTML = "N/A";
+        document.getElementById("satCount").innerHTML = "N/A";
+        document.getElementById("latitude").innerHTML = "N/A";
+        document.getElementById("longitude").innerHTML = "N/A ";
 	    $.ajax({
     	    type: "get",
     	    url: "/table",
