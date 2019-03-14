@@ -60,11 +60,11 @@ div {
 
     &nbsp; Modem
     <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay1Status' hidden=true>True</div>
+    <div id='relay1Status' hidden=true>False</div>
 
     &nbsp; Analog Streamer
     <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay2Status' hidden=true>True</div>
+    <div id='relay2Status' hidden=true>False</div>
 
 
 
@@ -82,10 +82,12 @@ div {
             <th>ATTRIBUTE</th>
             <th>VALUE</th>
         </tr>
+        <!--
         <tr>
             <td>Modem Power</td>
             <td id="pwrState">N/A</td>
         </tr>
+        -->
         <tr>
             <td>Network State</td>
             <td id="netState">N/A</td>
@@ -237,16 +239,16 @@ div {
           url: "/modem",
           success: function(data){
               var table=data.split(',');
-              document.getElementById("pwrState").innerHTML = "N/A";
-              document.getElementById("netState").innerHTML = "N/A";
-              document.getElementById("netChan").innerHTML = "N/A";
-              document.getElementById("sigStrength").innerHTML = "N/A";
-              document.getElementById("netServ").innerHTML = "N/A";
-              document.getElementById("wanIP").innerHTML = "N/A";
-              document.getElementById("gpsFix").innerHTML = "N/A";
-              document.getElementById("satCount").innerHTML = "N/A";
-              document.getElementById("latitude").innerHTML = "N/A";
-              document.getElementById("longitude").innerHTML = "N/A ";
+              //document.getElementById("pwrState").innerHTML = "ON";
+              document.getElementById("netState").innerHTML = table[2];
+              document.getElementById("netChan").innerHTML = table[3];
+              document.getElementById("sigStrength").innerHTML = table[4];
+              document.getElementById("netServ").innerHTML = table[1];
+              document.getElementById("wanIP").innerHTML = table[0];
+              document.getElementById("gpsFix").innerHTML = table[5];
+              document.getElementById("satCount").innerHTML = table[6];
+              document.getElementById("latitude").innerHTML = table[7];
+              document.getElementById("longitude").innerHTML = table[8];
           },
       })
 	    $.ajax({

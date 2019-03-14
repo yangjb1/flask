@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
 import missionbox as mb
+import modem
 import os
 from video import VideoCamera
 import fnmatch
@@ -10,7 +11,6 @@ import psutil
 app=Flask(__name__)
 video_camera = None
 global_frame = None
-video_on = False
 
 @app.route('/handle_streaming')
 def handle_streaming():
@@ -43,10 +43,12 @@ def relay2():
 
 @app.route('/table')
 def table():
-    #table = '0,1,1,1,1,1,1'
     table = mb.status()
-    #table = table.split(',')
     return table
+
+@app.route('/modem')
+def modem():
+    return modem.modem()
 
 @app.route('/')
 @app.route('/home')
@@ -55,23 +57,11 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
-    #table = '1,1,1,1,1,1,1'
-    #status = mb.status()
-    #table = table.split(',')
     return render_template('home.html', streaming=mb.check_stream())
-    '''
-    status=mb.status()
-    temp=status.split(',')
-    if len(temp) == 6:
-        return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream(),status=status)
-    else: 
-        return render_template('home.html', fileNames=fileFilter(), streaming=mb.check_stream())
-    '''
 
 @app.route('/control_panel', methods=['GET','POST'])
 def control_panel():
     status=mb.status()
-    #gps=mb.gps()
     logFile()
     f.write('control_panel page\n')
     f.flush()
@@ -125,7 +115,7 @@ def stop_stream():
 
 @app.route('/load_video')
 def load_video():
-    return render_template('load_video.html', streaming=mb.check_stream())
+    return render_template('load_video.html')
 
 @app.route('/shutdown')
 def shutdown():
@@ -179,57 +169,16 @@ def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-'''
-@app.route('/relay1')
-def relay1():
-    mb.relay('6')
-    status = mb.status()
-    logFile()
-    f.write(status)
-    f.flush()
-    return render_template('/home=.html', status=status, table=tableValue(status))
-
-@app.route('/relay2')
-def relay2():
-    mb.relay('7')
-    status = mb.status()
-    logFile()
-    f.write(status)
-    f.flush()
-    return render_template('/home.html', status=status, table=tableValue(status))
-
-@app.route('/relay3')
-def relay3():
-    mb.relay('8')
-    status = mb.status()
-    logFile()
-    f.write(status)
-    f.flush()
-    return render_template('/home.html', status=status, table=tableValue(status))
-
-@app.route('/relay4')
-def relay4():
-    mb.relay('9')
-    status = mb.status()
-    logFile()
-    f.write(status)
-    f.flush()
-    return render_template('/home.html', status=status, table=tableValue(status))
-'''
-
 f=open('logFile', 'a+')
 f.write('----------------------------------------\n')
 f.write(str(datetime.now()) + '\n')
 f.flush()
-
 
 def logFile():
     timeNow = (str(datetime.now()))
     cpu = str(psutil.cpu_percent(interval=1))
     f.write(timeNow + ',' + cpu + ',')
     f.flush()
-
 
 if __name__ == '__main__':
     app.run(debug=True)

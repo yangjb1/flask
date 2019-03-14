@@ -16,69 +16,63 @@ cmd2="AT*LTERSRQ?"
 cmd3="AT*NETRSSI?"
 cmd4="AT*NETSERV?"
 cmd5="AT*GPSDATA?"
-
-#cmdx="python new1.py"
-#file to store complete telnet window content
-#filename1=r"C:\Users\User\Desktop\mb\raw_log.txt"
-#file to store only the latest telnet window content
-#filename2=r"C:\Users\User\Desktop\mb\latest_raw_log.txt"
-#file opened in append mode to keep previous data and append latest data to bottom
-#file1=open(filename1,"a")
-#file opened in write mode only to store latest content
-#file2=open(filename2,"w")
-try:
-    #opening a telnet connection with host and port number, port and host could be modified in modem which might cause this program to fail
+def modem():
+  try:
     tn = telnetlib.Telnet(HOST,2332)
-    #read until 'login:' appears on telnet window
     tn.read_until(b"login: ")
-    #after finding 'login' enter username, same process with password too
-    tn.write(user.encode('ascii') + b"\n")
-    #approx wait for 2 seconds for modem to authenticate username and print out 'password:'
+    tn.write(user + b"\n")
     #time.sleep(2)
-    #print("success0")
     tn.read_until(b"Password: ")
-    tn.write(password.encode('ascii') + b"\n")
-    #time.sleep(2)
+    tn.write(password + b"\n")
+    time.sleep(1)
 
-    # Enter AT commands one after other with 1.5 sec wait time for modem to give command output
-    tn.write(cmd0.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tn.write(cmd4.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tn.write(cmd1.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tn.write(cmd2.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tn.write(cmd3.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tn.write(cmd5.encode('ascii')+b"\n")
-    #time.sleep(1.5)
-    tl1 =tn.read_very_eager().decode('ascii')
-	#close telnet connection
+    tn.write(cmd0+b"\n")
+    time.sleep(1)
+    tn.write(cmd4+b"\n")
+    time.sleep(1)
+    tn.write(cmd1+b"\n")
+    time.sleep(1)
+    tn.write(cmd2+b"\n")
+    time.sleep(1)
+    tn.write(cmd3+b"\n")
+    time.sleep(1)
+    tn.write(cmd5+b"\n")
+    time.sleep(1)
+    tl1 = ''
+    tl1 = tn.read_very_eager()
+	  #close telnet connection
     tn.close()
-    #currentDT = datetime.datetime.now()
-    #dtstr=str(currentDT)
-	#Print date time along with telnet window content
-    print (str(currentDT))
-    print(tl1)
-	#Write data to files and close
-    #file1.write(str(currentDT))
-    #file1.write(tl1)
-    #file1.close()
-    #file2.write(str(currentDT))
-    #file2.write(tl1)
-    #file2.close()
-	#Call another program to process log text and save clean version to another file
-    #os.system(cmdx)
+    print tl1
 
-except:
+    ttl = tl1.split()
+    print ttl
+    #ttl = list(filter(None, ttl))
+
+    temp = ''
+    for i in range(0,len(ttl)):
+      if ttl[i] == cmd0:
+        temp = temp + ttl[i+1] + ','
+      if ttl[i] == cmd1:
+          if ttl[i+2] is not 'Ready':
+              temp += 'Down,'
+      if ttl[i] == cmd2:
+        temp = temp + ttl[i+1] + ','
+      if ttl[i] == cmd3:
+        temp = temp + ttl[i+1] + ','
+      if ttl[i] == cmd4:
+        temp = temp + ttl[i+1] + ','
+      if ttl[i] == cmd5:
+        x = ttl[i+2]
+        temp += x[4:] + ','
+        x = ttl[i+4]
+        temp += x[6:] + ','
+        x = ttl[i+5]
+        temp += x[9:] + ','
+        x = ttl[i+6]
+        temp += x[10:]
+
+    #print temp
+    return temp
+  except:
     print "ERROR"
-    #In case of error at any point print 'Error' to text file
-	#file1.write("Error")
-	#file1.close()
-	#file2.write("Error")
-	#file2.close()
-	#f2=open(r"C:\Users\User\Desktop\mb\a_clean_log.txt","a")
-  #f3=open(r"C:\Users\User\Desktop\mb\w_clean_log.txt","w")
-  #f2.write("Error")
-  #f3.write("Error")
+    return 'error'
