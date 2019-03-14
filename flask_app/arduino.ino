@@ -23,8 +23,8 @@ void setup() {
     Serial.begin( 9600 );  
     pinMode(RELAY1, OUTPUT);
     pinMode(RELAY2, OUTPUT);
-    pinMode(RELAY3, OUTPUT);
-    pinMode(RELAY4, OUTPUT);
+    //pinMode(RELAY3, OUTPUT);
+    //pinMode(RELAY4, OUTPUT);
 
     digitalWrite( RELAY1, HIGH); // OFF
     digitalWrite( RELAY2, HIGH); // OFF
