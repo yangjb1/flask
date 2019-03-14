@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="/static/bootstrap.min.css">
-        <script src="/static/jquery.min.js"></script>
-        <script src="/static/bootstrap.min.js"></script>
-        <link href="/static/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="/static/bootstrap-toggle.min.js"></script>
+<head>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <script src="/static/jquery.min.js"></script>
+  <script src="/static/bootstrap.min.js"></script>
+  <link href="/static/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="/static/bootstrap-toggle.min.js"></script>
 <style>
 body {
-      background-color: rgb(78,50,72);
+  background-color: rgb(78,50,72);
 }
 div {
   color:white;
 }
 </style>
 
-        <!--
-        <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
+<!--
+<script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+-->
 
-        <style>
-        .slow .toggle-group { transition: left 0.7s; -webkit-transition: left .8s; }
-        </style>
-    </head>
+<style>
+.slow .toggle-group { transition: left 0.7s; -webkit-transition: left .8s; }
+</style>
+</head>
 <body>
 <h1>
     <span style="color:red">MISSION</span><span style="color:white"> BOX</span>
@@ -60,11 +60,11 @@ div {
 
     &nbsp; Modem
     <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay1Status' hidden=true>{{ relay1 }}</div>
+    <div id='relay1Status' hidden=true>True</div>
 
     &nbsp; Analog Streamer
     <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay2Status' hidden=true>{{ relay2 }}</div>
+    <div id='relay2Status' hidden=true>True</div>
 
 
 
@@ -151,23 +151,6 @@ div {
     </form>
     <p id="p1"> </p>
 </div>
-<!--
-<div>
-
-    <form action="{{ url_for('loadVideo') }}" method="POST">
-        <select name="videos">
-            {% for fileName in fileNames %}
-            <option value="{{fileName}}">{{fileName}}</option>
-            {% endfor %}
-        </select>
-        <button type='submit'>Load</button>
-    </form>
-
-    <input type="file" name="myFile"><br><br>
-
-
-</div>
--->
 
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
@@ -181,15 +164,21 @@ div {
         } else {
           $('#stream').bootstrapToggle('off');
         }
-    var relay1Status = $('#relay12Status').text();
+    var relay1Status = $('#relay1Status').text();
         if (relay1Status == 'True') {
           $('#relay1').bootstrapToggle('on');
         } else {
           $('#relay1').bootstrapToggle('off');
         }
+    var relay2Status = $('#relay2Status').text();
+        if (relay2Status == 'True') {
+          $('#relay2').bootstrapToggle('on');
+        } else {
+          $('#relay2').bootstrapToggle('off');
+        }
+
     $(function() {
         $('#stream').change(function() {
-            //$('#streamStatus').html($(this).prop('checked'))
             var current_status = $('#streamStatus').text();
                 $.ajax({
                     url:"/handle_streaming",
@@ -243,16 +232,23 @@ div {
     })
 
     function setStatus(){
-        document.getElementById("pwrState").innerHTML = "N/A";
-        document.getElementById("netState").innerHTML = "N/A";
-        document.getElementById("netChan").innerHTML = "N/A";
-        document.getElementById("sigStrength").innerHTML = "N/A";
-        document.getElementById("netServ").innerHTML = "N/A";
-        document.getElementById("wanIP").innerHTML = "N/A";
-        document.getElementById("gpsFix").innerHTML = "N/A";
-        document.getElementById("satCount").innerHTML = "N/A";
-        document.getElementById("latitude").innerHTML = "N/A";
-        document.getElementById("longitude").innerHTML = "N/A ";
+        $.ajax({
+          type: "get",
+          url: "/modem",
+          success: function(data){
+              var table=data.split(',');
+              document.getElementById("pwrState").innerHTML = "N/A";
+              document.getElementById("netState").innerHTML = "N/A";
+              document.getElementById("netChan").innerHTML = "N/A";
+              document.getElementById("sigStrength").innerHTML = "N/A";
+              document.getElementById("netServ").innerHTML = "N/A";
+              document.getElementById("wanIP").innerHTML = "N/A";
+              document.getElementById("gpsFix").innerHTML = "N/A";
+              document.getElementById("satCount").innerHTML = "N/A";
+              document.getElementById("latitude").innerHTML = "N/A";
+              document.getElementById("longitude").innerHTML = "N/A ";
+          },
+      })
 	    $.ajax({
     	    type: "get",
     	    url: "/table",
@@ -265,8 +261,6 @@ div {
               document.getElementById("voltage").innerHTML = table[4];
     	    },
     	})
-
-
     }
 </script>
 </html>
