@@ -15,8 +15,8 @@ float R1 = 29900.0; //
 float R2 = 7510.0; //
 int value = 0;
 
-bool RELAY1_status = 1;
-bool RELAY2_status = 1;
+bool RELAY1_status = 0;
+bool RELAY2_status = 0;
 
 void setup() {
     // put your setup code here, to run once:

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
 import missionbox as mb
-import modem
+import modem as m
 import os
 from video import VideoCamera
 import fnmatch
@@ -48,7 +48,7 @@ def table():
 
 @app.route('/modem')
 def modem():
-    return modem.modem()
+    return m.modem()
 
 @app.route('/')
 @app.route('/home')
