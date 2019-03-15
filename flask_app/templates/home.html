@@ -133,16 +133,16 @@ div {
             <td id="pcVoltage">N/A</td>
         </tr>
         <tr>
+            <td>Modem (V)</td>
+            <td id="modem">N/A</td>
+        </tr>
+        <tr>
             <td>12V (V)</td>
             <td id="v12">N/A</td>
         </tr>
         <tr>
             <td>5V (V)</td>
             <td id="v5">N/A</td>
-        </tr>
-        <tr>
-            <td>Voltage (V)</td>
-            <td id="voltage">N/A</td>
         </tr>
     </table>
 
@@ -257,10 +257,10 @@ div {
             success: function(data){
               var table=data.split(',');
 	            document.getElementById("pcCurrent").innerHTML = table[0];
-              document.getElementById("pcVoltage").innerHTML = table[1];
-	            document.getElementById("v12").innerHTML = table[2];
-	            document.getElementById("v5").innerHTML = table[3];
-              document.getElementById("voltage").innerHTML = table[4];
+              document.getElementById("pcVoltage").innerHTML = table[3];
+	            document.getElementById("v12").innerHTML = table[1];
+	            document.getElementById("v5").innerHTML = table[2];
+              document.getElementById("modem").innerHTML = table[4];
     	    },
     	})
     }
