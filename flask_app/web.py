@@ -16,39 +16,65 @@ global_frame = None
 def handle_streaming():
     current_status = request.args.get('streamStatus')
     if current_status == 'False':
+        logFile()
+        f.write('stream on\n')
+        f.flush()
         stream()
         return 'True'
     else:
         stop_stream()
+        logFile()
+        f.write('stream off\n')
+        f.flush()
         return 'False'
     # return 'True' if current_status == 'False' else 'False'
 
-@app.route('/relay1')
+@app.route('/relay1') # modem
 def relay1():
     relay1Status = request.args.get('relay1Status')
     mb.relay('6')
     if relay1Status == 'False':
+        logFile()
+        f.write('modem on\n')
+        f.flush()
         return 'True'
     else:
+        logFile()
+        f.write('modem off\n')
+        f.flush()
         return 'False'
 
-@app.route('/relay2')
+@app.route('/relay2') #analog streamer
 def relay2():
     relay2Status = request.args.get('relay2Status')
     mb.relay('7')
     if relay2Status == 'False':
+        logFile()
+        f.write('analog streamer on\n')
+        f.flush()
         return 'True'
     else:
+        logFile()
+        f.write('analog streamer off\n')
+        f.flush()
         return 'False'
 
 @app.route('/table')
 def table():
     table = mb.status()
+    logFile()
+    f.write('meters-' + table + '\n')
+    f.flush()
     return table
 
 @app.route('/modem')
 def modem():
-    return m.modem()
+    table = m.modem()
+    logFile()
+    f.write('modem status-' + table + '\n')
+    f.flush()
+    return table
+
 
 @app.route('/')
 @app.route('/home')
@@ -77,13 +103,6 @@ def loadVideo():
     return render_template('home.html', fileNames=fileFilter())
     # return(str(select)) # just to see what select is
 
-'''
-@app.route('/check_stream',methods=['get'])
-def check_stream():
-    stream= mb.check_stream()
-    return render_template('control_panel.html', stream=stream)
-'''
-
 @app.route('/handle_stream', methods=["POST"])
 def handle_stream():
     json = request.get_json()
@@ -93,13 +112,13 @@ def handle_stream():
     if status == "true":
         stream()
         logFile()
-        f.write('stream on')
+        f.write('stream on\n')
         f.flush()
         return jsonify(result="started")
     else:
         stop_stream()
         logFile()
-        f.write('stream off')
+        f.write('stream off\n')
         f.flush()
         return jsonify(result="stoped")
 
@@ -132,16 +151,16 @@ def record_status():
     status = json['status']
 
     if status == "true":
-        video_camera.start_record()
         logFile()
-        f.write('capture on')
+        f.write('capture on\n')
         f.flush()
+        video_camera.start_record()
         video_on = True
         return jsonify(result="started")
     else:
         video_camera.stop_record()
         logFile()
-        f.write('capture off')
+        f.write('capture off\n')
         f.flush()
         video_on = False
         return jsonify(result="stopped")
@@ -169,7 +188,7 @@ def video_viewer():
     return Response(video_stream(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-f=open('logFile', 'a+')
+f=open('log', 'a+')
 f.write('----------------------------------------\n')
 f.write(str(datetime.now()) + '\n')
 f.flush()

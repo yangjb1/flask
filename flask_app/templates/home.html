@@ -147,10 +147,12 @@ div {
     </table>
 
     <div id="tablePrint"> </div>
-
+<!--
     <form action="/shutdown" method="get">
         <button>shutdown</button>
     </form>
+-->
+<button id="sys_shutdown" onclick="shutdown()">Shut Down</button>
     <p id="p1"> </p>
 </div>
 
@@ -264,5 +266,18 @@ div {
     	    },
     	})
     }
+
+    function shutdown() {
+      var r = confirm("Please confirm system shutdown!");
+      if (r == true) {
+        console.log('shutdown');
+        $.ajax({
+            type: "get",
+            url: "/shutdown",
+            success: function(){},
+        })
+    }
+    }
+
 </script>
 </html>
