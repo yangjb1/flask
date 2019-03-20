@@ -1,12 +1,13 @@
 #define RELAY1  6 // modem
 #define RELAY2  7 // analog streamer
+#define reset   0
 
 /*
-A0-current
-A1-v1
-A2-v2
-A3-v3
-A4-v4
+A0-current - 12v junction box
+A1-v1 - 12v
+A2-v2 - 5v
+A3-v3 - pc 20v
+A4-v4 - 12v
 */
 
 float vout = 0.0;
@@ -93,6 +94,8 @@ void loop() {
             digitalWrite( RELAY2, LOW); // ON
             RELAY2_status = 1;
         }
+    } else if (COM_value == reset) {
+        reSet();
     }
     /*
     value = analogRead(analogInput);
@@ -100,4 +103,10 @@ void loop() {
     vin = vout / (R2/(R1+R2));
     */
 
+}
+
+void reset() {
+
+    digitalWrite( RELAY1, HIGH); // OFF
+    digitalWrite( RELAY2, HIGH); // OFF
 }

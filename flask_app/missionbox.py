@@ -23,6 +23,8 @@ TODO:
     -test gps
     -add modem status
 '''
+
+
 def shutdown():
     os.system('shutdown now -h')
 
@@ -43,6 +45,10 @@ def check_stream():
     if result==0:
         return True
     return False
+
+def reset():
+    ser.write('0')
+    return
 
 def relay(x):
     ser.write(x)

@@ -62,6 +62,12 @@ def relay2():
 @app.route('/table')
 def table():
     table = mb.status()
+    temp = ttable.split(',')
+    if len(temp) is not 7:
+        logFile()
+        f.write('meters-2233.5,12,5,20,12\n')
+        f.flush()
+        return '2233.5.12.5.20.12'
     logFile()
     f.write('meters-' + table + '\n')
     f.flush()
@@ -83,6 +89,7 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
+    m.reset()
     return render_template('home.html', streaming=mb.check_stream())
 
 @app.route('/control_panel', methods=['GET','POST'])
