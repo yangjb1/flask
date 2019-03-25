@@ -7,6 +7,9 @@ from video import VideoCamera
 import fnmatch
 from datetime import datetime
 import psutil
+'''
+modem status
+'''
 
 app=Flask(__name__)
 video_camera = None
@@ -28,6 +31,10 @@ def handle_streaming():
         f.flush()
         return 'False'
     # return 'True' if current_status == 'False' else 'False'
+
+@app.route('/ip_addr')
+def ip_addr():
+    return mb.ip_addr()
 
 @app.route('/relay1') # modem
 def relay1():
@@ -67,7 +74,7 @@ def table():
         logFile()
         f.write('meters-2233.5,12,5,20,12\n')
         f.flush()
-        return '2233.5.12.5.20.12'
+        return '2233.5,12.5,20,12'
     logFile()
     f.write('meters-' + table + '\n')
     f.flush()
@@ -89,7 +96,7 @@ def hello():
     logFile()
     f.write('home page\n')
     f.flush()
-    m.reset()
+    #mb.reset()
     return render_template('home.html', streaming=mb.check_stream())
 
 @app.route('/control_panel', methods=['GET','POST'])
@@ -109,25 +116,6 @@ def loadVideo():
     f.flush()
     return render_template('home.html', fileNames=fileFilter())
     # return(str(select)) # just to see what select is
-
-@app.route('/handle_stream', methods=["POST"])
-def handle_stream():
-    json = request.get_json()
-
-    status = json['status']
-
-    if status == "true":
-        stream()
-        logFile()
-        f.write('stream on\n')
-        f.flush()
-        return jsonify(result="started")
-    else:
-        stop_stream()
-        logFile()
-        f.write('stream off\n')
-        f.flush()
-        return jsonify(result="stoped")
 
 @app.route('/stream')
 def stream():

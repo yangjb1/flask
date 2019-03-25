@@ -40,38 +40,35 @@ div {
     </div>
     <img id="video" width="672" height="378" src="{{ url_for('video_viewer') }}">
     <div id="recorder">
-    <div>
-    Video Record
-    <button id="record">Record</button>
-    <button id="stop">Stop</button>
-    <a id="download" hidden="true"></a>
-    &nbsp; Video Playback
-    <button onclick='window.open("load_video")'>Video Playback</button>
-    </div>
+        <div>
+            Video Record
+            <button id="record">Record</button>
+            <button id="stop">Stop</button>
+            <a id="download" hidden="true"></a>
+            &nbsp; Video Playback
+            <button onclick='window.open("load_video")'>Video Playback</button>
+        </div>
         <div>
             <h4>
                 DEVICE CONTROL
             </h4>
         </div>
 
-    Stream
-    <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='streamStatus' hidden=true>{{ streaming }}</div>
+        Stream
+        <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <div id='streamStatus' hidden="true">{{ streaming }}</div>
+        &nbsp; Modem
+        <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <div id='relay1Status' hidden=true>False</div>
+        &nbsp; Analog Streame
+        <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <div id='relay2Status' hidden=true>False</div>
 
-    &nbsp; Modem
-    <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay1Status' hidden=true>False</div>
-
-    &nbsp; Analog Streamer
-    <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
-    <div id='relay2Status' hidden=true>False</div>
-
-
-
+        <div id="streamOutput"></div>
+    </div>
 </div>
-</div>
+
 <div style="float: right;">
-
     <div>
         <h4>
             SYSTEM STATUS
@@ -152,7 +149,8 @@ div {
         <button>shutdown</button>
     </form>
 -->
-<button id="sys_shutdown" onclick="shutdown()">Shut Down</button>
+
+    <button id="sys_shutdown" onclick="shutdown()">Shut Down</button>
     <p id="p1"> </p>
 </div>
 
@@ -160,116 +158,156 @@ div {
 <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
 
 <script>
-    setInterval(function(){ setStatus() }, 5000);
+setInterval(function(){ setStatus() }, 5000);
+setInterval(function(){ streamStatus() }, 5000);
 
-    var current_status = $('#streamStatus').text();
+var current_status = $('#streamStatus').text();
+if (current_status == 'True') {
+    $('#stream').bootstrapToggle('on');
+} else {
+    $('#stream').bootstrapToggle('off');
+}
+var relay1Status = $('#relay1Status').text();
+if (relay1Status == 'True') {
+    $('#relay1').bootstrapToggle('on');
+} else {
+    $('#relay1').bootstrapToggle('off');
+}
+
+var relay2Status = $('#relay2Status').text();
+if (relay2Status == 'True') {
+    $('#relay2').bootstrapToggle('on');
+} else {
+    $('#relay2').bootstrapToggle('off');
+}
+
+$(function() {
+    $('#stream').change(function() {
+        var current_status = $('#streamStatus').text();
+        $.ajax({
+            url:"/handle_streaming",
+            type:"get",
+            data: {streamStatus: current_status},
+            success: function(response) {
+                $("#streamStatus").html(response);
+            }
+        })
         if (current_status == 'True') {
-          $('#stream').bootstrapToggle('on');
+            $('#streamStatus').html('False');
         } else {
-          $('#stream').bootstrapToggle('off');
+            $('#streamStatus').html('True');
         }
-    var relay1Status = $('#relay1Status').text();
-        if (relay1Status == 'True') {
-          $('#relay1').bootstrapToggle('on');
-        } else {
-          $('#relay1').bootstrapToggle('off');
-        }
-    var relay2Status = $('#relay2Status').text();
-        if (relay2Status == 'True') {
-          $('#relay2').bootstrapToggle('on');
-        } else {
-          $('#relay2').bootstrapToggle('off');
-        }
-
-    $(function() {
-        $('#stream').change(function() {
-            var current_status = $('#streamStatus').text();
-                $.ajax({
-                    url:"/handle_streaming",
-                    type:"get",
-                    data: {streamStatus: current_status},
-                    success: function(response) {
-                        $("#streamStatus").html(response);
-                    }
-                })
-            if (current_status == 'True') {
-                $('#streamStatus').html('False');
-            } else {
-                $('#streamStatus').html('True');
-            }
-        })
-
-
-        $('#relay1').change(function() {
-            var current_status = $('#relay1Status').text();
-            $.ajax({
-                url:"/relay1",
-                type:"get",
-                data: {relay1Status: current_status},
-                success: function(response) {
-                    $("#relay1Status").html(response);
-                }
-            })
-            if (current_status == 'True') {
-                $('#relay1Status').html('False');
-            } else {
-                $('#relay1Status').html('True');
-            }
-        })
-
-        $('#relay2').change(function() {
-            var current_status = $('#relay2Status').text();
-            $.ajax({
-                url:"/relay2",
-                type:"get",
-                data: {relay2Status: current_status},
-                success: function(response) {
-                    $("#relay2Status").html(response);
-                }
-            })
-            if (current_status == 'True') {
-                $('#relay2Status').html('False');
-            } else {
-                $('#relay2Status').html('True');
-            }
-        })
     })
 
-    function setStatus(){
+    $('#relay1').change(function() {
+        var current_status = $('#relay1Status').text();
         $.ajax({
-          type: "get",
-          url: "/modem",
-          success: function(data){
-              var table=data.split(',');
-              //document.getElementById("pwrState").innerHTML = "ON";
-              document.getElementById("netState").innerHTML = table[2];
-              document.getElementById("netChan").innerHTML = table[3];
-              document.getElementById("sigStrength").innerHTML = table[4];
-              document.getElementById("netServ").innerHTML = table[1];
-              document.getElementById("wanIP").innerHTML = table[0];
-              document.getElementById("gpsFix").innerHTML = table[5];
-              document.getElementById("satCount").innerHTML = table[6];
-              document.getElementById("latitude").innerHTML = table[7];
-              document.getElementById("longitude").innerHTML = table[8];
-          },
-      })
-	    $.ajax({
-    	    type: "get",
-    	    url: "/table",
-            success: function(data){
-              var table=data.split(',');
-	            document.getElementById("pcCurrent").innerHTML = table[0];
-              document.getElementById("pcVoltage").innerHTML = table[3];
-	            document.getElementById("v12").innerHTML = table[1];
-	            document.getElementById("v5").innerHTML = table[2];
-              document.getElementById("modem").innerHTML = table[4];
-    	    },
-    	})
-    }
+            url:"/relay1",
+            type:"get",
+            data: {relay1Status: current_status},
+            success: function(response) {
+                $("#relay1Status").html(response);
+            }
+        })
+        if (current_status == 'True') {
+            $('#relay1Status').html('False');
+        } else {
+            $('#relay1Status').html('True');
+        }
+    })
 
-    function shutdown() {
-      var r = confirm("Please confirm system shutdown!");
-      if (r == true) {
+    $('#relay2').change(function() {
+        var current_status = $('#relay2Status').text();
+        $.ajax({
+            url:"/relay2",
+            type:"get",
+            data: {relay2Status: current_status},
+            success: function(response) {
+                $("#relay2Status").html(response);
+            }
+        })
+        if (current_status == 'True') {
+            $('#relay2Status').html('False');
+        } else {
+            $('#relay2Status').html('True');
+        }
+    })
+})
+
+function setStatus(){
+    $.ajax({
+        type: "get",
+        url: "/modem",
+        success: function(data){
+            var table=data.split(',');
+            //document.getElementById("pwrState").innerHTML = "ON";
+            document.getElementById("netState").innerHTML = table[2];
+            document.getElementById("netChan").innerHTML = table[3];
+            document.getElementById("sigStrength").innerHTML = table[4];
+            document.getElementById("netServ").innerHTML = table[1];
+            document.getElementById("wanIP").innerHTML = table[0];
+            document.getElementById("gpsFix").innerHTML = table[5];
+            document.getElementById("satCount").innerHTML = table[6];
+            document.getElementById("latitude").innerHTML = table[7];
+            document.getElementById("longitude").innerHTML = table[8];
+         },
+    })
+	$.ajax({
+        type: "get",
+        url: "/table",
+        success: function(data){
+            var table=data.split(',');
+	        document.getElementById("pcCurrent").innerHTML = table[0];
+            document.getElementById("pcVoltage").innerHTML = table[3];
+	        document.getElementById("v12").innerHTML = table[1];
+	        document.getElementById("v5").innerHTML = table[2];
+            document.getElementById("modem").innerHTML = table[4];
+        },
+    })
+}
+
+function streamStatus() {
+    var current_status = $('#streamStatus').text();
+    //console.log($('#stream').bootstrapToggle('toggle'));
+    if($("#stream").prop("checked") == true) {
+        console.log('true');
+        if(current_status == "True") {
+            $.ajax({
+                url: "/ip_addr",
+                type: "get",
+                success: function(response) {
+                    document.getElementById("streamOutput").innerHTML = "Stream at http://" + response + ":8090/stream.mjpg";
+                }
+            })
+        } else {
+            $.ajax({
+                url:"/handle_streaming",
+                type:"get",
+                data: {streamStatus: current_status},
+                success: function(){}
+            })
+        }
+    } else {
+        console.log('false');
+        if(current_status == "True") {
+            document.getElementById("streamOutput").innerHTML = "";
+            document.getElementById("streamStatus").innerHTML = "False";
+            $.ajax({
+                url:"/handle_streaming",
+                type:"get",
+                data: {streamStatus: current_status},
+                success: function(){}
+            })
+        } else {
+            document.getElementById("streamOutput").innerHTML = "";
+        }
+
+    }
+}
+
+function shutdown() {
+    var r = confirm("Please confirm system shutdown!");
+    if (r == true) {
         console.log('shutdown');
         $.ajax({
             type: "get",
@@ -277,7 +315,7 @@ div {
             success: function(){},
         })
     }
-    }
+}
 
 </script>
 </html>
