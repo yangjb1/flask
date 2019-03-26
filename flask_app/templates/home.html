@@ -235,6 +235,7 @@ $(function() {
 })
 
 function setStatus(){
+/*
     $.ajax({
         type: "get",
         url: "/modem",
@@ -252,6 +253,41 @@ function setStatus(){
             document.getElementById("longitude").innerHTML = table[8];
          },
     })
+*/
+    $.ajax({
+        type: "get",
+        url: "/modem",
+        success: function(response) {
+            if (response != "False") {
+                console.log("modem on");
+                var table=response.split(',');
+                //document.getElementById("pwrState").innerHTML = "ON";
+                document.getElementById("netState").innerHTML = table[2];
+                document.getElementById("netChan").innerHTML = table[3];
+                document.getElementById("sigStrength").innerHTML = table[4];
+                document.getElementById("netServ").innerHTML = table[1];
+                document.getElementById("wanIP").innerHTML = table[0];
+                document.getElementById("gpsFix").innerHTML = table[5];
+                document.getElementById("satCount").innerHTML = table[6];
+                document.getElementById("latitude").innerHTML = table[7];
+                document.getElementById("longitude").innerHTML = table[8];
+
+            } else {
+                console.log("modem false");
+                //document.getElementById("pwrState").innerHTML = "ON";
+                document.getElementById("netState").innerHTML = "N/A";
+                document.getElementById("netChan").innerHTML = "N/A";
+                document.getElementById("sigStrength").innerHTML = "N/A";
+                document.getElementById("netServ").innerHTML = "N/A";
+                document.getElementById("wanIP").innerHTML = "N/A";
+                document.getElementById("gpsFix").innerHTML = "N/A";
+                document.getElementById("satCount").innerHTML = "N/A";
+                document.getElementById("latitude").innerHTML = "N/A";
+                document.getElementById("longitude").innerHTML = "N/A";
+            }
+        }
+    })
+
 	$.ajax({
         type: "get",
         url: "/table",
@@ -270,7 +306,7 @@ function streamStatus() {
     var current_status = $('#streamStatus').text();
     //console.log($('#stream').bootstrapToggle('toggle'));
     if($("#stream").prop("checked") == true) {
-        console.log('true');
+        //console.log('true');
         if(current_status == "True") {
             $.ajax({
                 url: "/ip_addr",
@@ -288,7 +324,7 @@ function streamStatus() {
             })
         }
     } else {
-        console.log('false');
+        //console.log('false');
         if(current_status == "True") {
             document.getElementById("streamOutput").innerHTML = "";
             document.getElementById("streamStatus").innerHTML = "False";

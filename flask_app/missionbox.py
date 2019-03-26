@@ -45,10 +45,19 @@ def stop_stream():
     os.system('pkill ffserver')
     return
 
+def check_modem():
+    socket.setdefaulttimeout(1)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('192.168.13.31', 9191))
+    if result == 0:
+        return 'True'
+    return 'False'
+
 def check_stream():
+    socket.setdefaulttimeout(1)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('localhost', 8090))
-    if result==0:
+    if result == 0:
         return True
     return False
 
