@@ -14,6 +14,7 @@ import socket
 import numpy as np
 import cv2
 import serial
+import urllib2
 
 ser=serial.Serial('/dev/ttyACM0', 9600)
 #gps=serial.Serial('/dev/ttyUSB0', 4800)
@@ -52,6 +53,13 @@ def check_modem():
     if result == 0:
         return 'True'
     return 'False'
+    '''
+    try:
+        urlib2.urlopen('http://localhost:8090', timeout=1)
+        return 'True'
+    except urllib2.URLError as err:
+        return 'False'
+    '''
 
 def check_stream():
     #socket.setdefaulttimeout(1)

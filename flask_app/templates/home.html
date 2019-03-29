@@ -266,17 +266,19 @@ function setStatus(){
             if (response != "False") {
                 console.log("modem on");
                 var table=response.split(',');
-                //document.getElementById("pwrState").innerHTML = "ON";
-                document.getElementById("netState").innerHTML = table[2];
-                document.getElementById("netChan").innerHTML = table[3];
-                document.getElementById("sigStrength").innerHTML = table[4];
-                document.getElementById("netServ").innerHTML = table[1];
-                document.getElementById("wanIP").innerHTML = table[0];
-                document.getElementById("gpsFix").innerHTML = table[5];
-                document.getElementById("satCount").innerHTML = table[6];
-                document.getElementById("latitude").innerHTML = table[7];
-                document.getElementById("longitude").innerHTML = table[8];
-
+                if(table[0] == error);
+                else {
+                    //document.getElementById("pwrState").innerHTML = "ON";
+                    document.getElementById("netState").innerHTML = table[2];
+                    document.getElementById("netChan").innerHTML = table[3];
+                    document.getElementById("sigStrength").innerHTML = table[4];
+                    document.getElementById("netServ").innerHTML = table[1];
+                    document.getElementById("wanIP").innerHTML = table[0];
+                    document.getElementById("gpsFix").innerHTML = table[5];
+                    document.getElementById("satCount").innerHTML = table[6];
+                    document.getElementById("latitude").innerHTML = table[7];
+                    document.getElementById("longitude").innerHTML = table[8];
+                }
             } else {
                 console.log("modem false");
                 //document.getElementById("pwrState").innerHTML = "ON";
@@ -298,11 +300,13 @@ function setStatus(){
         url: "/table",
         success: function(data){
             var table=data.split(',');
-	        document.getElementById("pcCurrent").innerHTML = table[0];
-            document.getElementById("pcVoltage").innerHTML = table[3];
-	        document.getElementById("v12").innerHTML = table[1];
-	        document.getElementById("v5").innerHTML = table[2];
-            document.getElementById("modem").innerHTML = table[4];
+            if (data.length == 7) {
+	            document.getElementById("pcCurrent").innerHTML = table[0];
+              document.getElementById("pcVoltage").innerHTML = table[3];
+	            document.getElementById("v12").innerHTML = table[1];
+	            document.getElementById("v5").innerHTML = table[2];
+              document.getElementById("modem").innerHTML = table[4];
+            } else;
         },
     })
 }

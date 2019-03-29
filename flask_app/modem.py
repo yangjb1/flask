@@ -74,5 +74,4 @@ def modem():
     #print temp
     return temp
   except:
-    print "ERROR"
     return 'error'

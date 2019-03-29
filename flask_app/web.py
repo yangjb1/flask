@@ -86,10 +86,11 @@ def table():
         f.write('meters-2233.5,12,5,20,12\n')
         f.flush()
         return '2233.5,12.5,20,12'
-    logFile()
-    f.write('meters-' + table + '\n')
-    f.flush()
-    return table
+    else:
+        logFile()
+        f.write('meters-' + table + '\n')
+        f.flush()
+        return table
 
 
 @app.route('/modem')
