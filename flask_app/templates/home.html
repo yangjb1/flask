@@ -266,7 +266,7 @@ function setStatus(){
             if (response != "False") {
                 console.log("modem on");
                 var table=response.split(',');
-                if(table[0] == error);
+                if(table[0] == "error");
                 else {
                     //document.getElementById("pwrState").innerHTML = "ON";
                     document.getElementById("netState").innerHTML = table[2];
