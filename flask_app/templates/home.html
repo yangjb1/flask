@@ -13,6 +13,11 @@ body {
 div {
   color:white;
 }
+
+button {
+  padding: 10px 15px;
+}
+
 </style>
 
 <!--
@@ -55,13 +60,13 @@ div {
         </div>
 
         Stream
-        <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <input id="stream" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger" data-size="large">
         <div id='streamStatus' hidden="true">{{ streaming }}</div>
         &nbsp; Modem
-        <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <input id="relay1" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger" data-size="large">
         <div id='relay1Status' hidden=true>False</div>
         &nbsp; Analog Streame
-        <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger">
+        <input id="relay2" type="checkbox" data-toggle="toggle" data-style="slow" data-onstyle="success" data-offstyle="danger" data-size="large">
         <div id='relay2Status' hidden=true>False</div>
 
         <div id="streamOutput"></div>
@@ -158,7 +163,7 @@ div {
 <script type="text/javascript" src="{{ url_for('static', filename='recorder.js') }}"></script>
 
 <script>
-setInterval(function(){ setStatus() }, 5000);
+setInterval(function(){ setStatus() }, 3000);
 setInterval(function(){ streamStatus() }, 5000);
 
 var current_status = $('#streamStatus').text();

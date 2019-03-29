@@ -54,7 +54,7 @@ def check_modem():
     return 'False'
 
 def check_stream():
-    socket.setdefaulttimeout(1)
+    #socket.setdefaulttimeout(1)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('localhost', 8090))
     if result == 0:
