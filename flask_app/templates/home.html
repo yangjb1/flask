@@ -18,6 +18,14 @@ button {
   padding: 10px 15px;
 }
 
+#section1 {
+  height: 1000px;
+}
+
+#section2 {
+  height: 1000px;
+}
+
 </style>
 
 <!--
@@ -35,9 +43,11 @@ button {
 </style>
 </head>
 <body>
+<div class="main" id="section1">
 <h1>
     <span style="color:red">MISSION</span><span style="color:white"> BOX</span>
 </h1>
+
 <div style="float: left">
     <!--16:9-->
     <div>
@@ -51,7 +61,10 @@ button {
             <button id="stop">Stop</button>
             <a id="download" hidden="true"></a>
             &nbsp; Video Playback
+            <!--
             <button onclick='window.open("load_video")'>Video Playback</button>
+            -->
+            <button><a href="#section2">Video PlayBack</a></button>
         </div>
         <div>
             <h4>
@@ -157,6 +170,23 @@ button {
 
     <button id="sys_shutdown" onclick="shutdown()">Shut Down</button>
     <p id="p1"> </p>
+</div>
+</div>
+
+<div class="main" id="section2">
+    <h1>
+        <span style="color:red">MISSION</span><span style="color:white"> BOX</span>
+    </h1>
+    <div>
+        <h4>VIDEO PLAY BACK</h4>
+    </div>
+    <div>
+        <input type="file" accept="video/*"/>
+    </div>
+    <video width="672" height="378" controls autoplay loop></video>
+    <div>
+    <button><a href="#section1">Stream</a></button>
+    </div>
 </div>
 
 </body>
