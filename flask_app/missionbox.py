@@ -47,6 +47,7 @@ def stop_stream():
     return
 
 def check_modem():
+    '''
     socket.setdefaulttimeout(1)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('192.168.13.31', 9191))
@@ -55,14 +56,20 @@ def check_modem():
     return 'False'
     '''
     try:
-        urlib2.urlopen('http://localhost:8090', timeout=1)
+        urllib2.urlopen('http://192.168.13.31:9191', timeout=1)
         return 'True'
     except urllib2.URLError as err:
         return 'False'
-    '''
 
 def check_stream():
+    '''
+    try:
+        urllib2.urlopen('http://10.11.162.72:8090', timeout=1)
+        return 'True'
+    except urllib2.URLError as err:
+        return 'False'
     #socket.setdefaulttimeout(1)
+    '''
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('localhost', 8090))
     if result == 0:
