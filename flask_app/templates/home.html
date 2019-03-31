@@ -15,15 +15,15 @@ div {
 }
 
 button {
-  padding: 10px 15px;
+  padding: 5px 10px;
 }
 
 #section1 {
-  height: 1000px;
+  height: 800px;
 }
 
 #section2 {
-  height: 1000px;
+  height: 600px;
 }
 
 </style>
@@ -64,7 +64,7 @@ button {
             <!--
             <button onclick='window.open("load_video")'>Video Playback</button>
             -->
-            <a href="#section2"><button>Video PlayBack</button></a>
+            <a href="#section2"><button class="btn-primary" >Video PlayBack</button></a>
         </div>
         <div>
             <h4>
@@ -168,7 +168,7 @@ button {
     </form>
 -->
 
-    <button id="sys_shutdown" onclick="shutdown()">Shut Down</button>
+    <button id="sys_shutdown" class="btn-warning" onclick="shutdown()">Shut Down</button>
     <p id="p1"> </p>
 </div>
 </div>
@@ -188,7 +188,7 @@ button {
     -->
     <iframe src="http://localhost:5000/load_video" style="border:none; height:500px;width:700px;"></iframe>
     <div>
-    <a href="#section1"><button>Stream</button></a>
+    <a href="#section1"><button class="btn-primary">Stream</button></a>
     </div>
 </div>
 
