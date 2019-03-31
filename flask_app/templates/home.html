@@ -297,7 +297,7 @@ function setStatus(){
         url: "/modem",
         success: function(response) {
             if (response != "False") {
-                console.log("modem on");
+                //console.log("modem on");
                 var table=response.split(',');
                 if(table[0] == "error");
                 else {
@@ -313,7 +313,7 @@ function setStatus(){
                     document.getElementById("longitude").innerHTML = table[8];
                 }
             } else {
-                console.log("modem false");
+                //console.log("modem false");
                 //document.getElementById("pwrState").innerHTML = "ON";
                 document.getElementById("netState").innerHTML = "N/A";
                 document.getElementById("netChan").innerHTML = "N/A";
