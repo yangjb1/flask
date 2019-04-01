@@ -1,6 +1,5 @@
 #define RELAY1  6 // modem
 #define RELAY2  7 // analog streamer
-#define reset   0
 
 /*
 A0-current - 12v junction box
@@ -12,8 +11,9 @@ A4-v4 - 12v
 
 float vout = 0.0;
 float vin = 0.0;
-float R1 = 29900.0; //
-float R2 = 7510.0; //
+float R1 = 29900.0;
+float R2 = 7905.26;
+//float R2 = 7510.0/.95;
 int value = 0;
 
 bool RELAY1_status = 0;
@@ -56,10 +56,10 @@ void loop() {
     float average = 0;
     for(int i = 0; i < 1000; i++) {
         average = average + (.0264 * analogRead(A0) -13.51);//for the 5A mode,
-        //   average = average + (.049 * analogRead(A0) -25);// for 20A mode
+        //average = average + (.049 * analogRead(A0) -25);// for 20A mode
         // average = average + (.742 * analogRead(A0) -37.8);// for 30A mode
     }
-    Serial.print(average,2);
+    Serial.print(abs(average/1000),2);
     Serial.print(",");
     Serial.print(v1,2);
     Serial.print(",");
@@ -94,8 +94,6 @@ void loop() {
             digitalWrite( RELAY2, LOW); // ON
             RELAY2_status = 1;
         }
-    } else if (COM_value == reset) {
-        reSet();
     }
     /*
     value = analogRead(analogInput);
@@ -103,10 +101,4 @@ void loop() {
     vin = vout / (R2/(R1+R2));
     */
 
-}
-
-void reset() {
-
-    digitalWrite( RELAY1, HIGH); // OFF
-    digitalWrite( RELAY2, HIGH); // OFF
 }
