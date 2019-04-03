@@ -59,6 +59,8 @@ void loop() {
         //average = average + (.049 * analogRead(A0) -25);// for 20A mode
         // average = average + (.742 * analogRead(A0) -37.8);// for 30A mode
     }
+    Serial.print("111");
+    Serial.print(",");
     Serial.print(abs(average/1000),2);
     Serial.print(",");
     Serial.print(v1,2);
